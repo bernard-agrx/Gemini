@@ -38,6 +38,7 @@ const AutoFitCamera = () => {
 const App: React.FC = () => {
   const [mapType, setMapType] = useState<MapType>(MapType.SAT);
   const [progress, setProgress] = useState(0);
+  const [rotationSpeed, setRotationSpeed] = useState(0.05);
 
   return (
     <div className="relative w-full h-full bg-black">
@@ -49,6 +50,7 @@ const App: React.FC = () => {
         <Globe 
           mapType={mapType} 
           onProgress={setProgress}
+          rotationSpeed={rotationSpeed}
         />
         <OrbitControls enablePan={false} minDistance={3} maxDistance={20} />
       </Canvas>
@@ -63,32 +65,51 @@ const App: React.FC = () => {
             <p className="text-gray-400 text-xs md:text-sm mt-1">Live Tile Streaming</p>
           </div>
           
-          <div className="flex gap-2">
-            <button 
-              onClick={() => setMapType(MapType.SAT)}
-              className={`px-2 md:px-3 py-1 text-[10px] md:text-xs font-bold uppercase border transition-colors ${
-                mapType === MapType.SAT 
-                  ? 'bg-red-600 border-red-600 text-white' 
-                  : 'bg-transparent border-gray-600 text-gray-400 hover:border-white'
-              }`}
-            >
-              Satellite
-            </button>
-            <button 
-              onClick={() => setMapType(MapType.MAP)}
-              className={`px-2 md:px-3 py-1 text-[10px] md:text-xs font-bold uppercase border transition-colors ${
-                mapType === MapType.MAP 
-                  ? 'bg-yellow-500 border-yellow-500 text-black' 
-                  : 'bg-transparent border-gray-600 text-gray-400 hover:border-white'
-              }`}
-            >
-              Map
-            </button>
+          <div className="flex flex-col items-end gap-3">
+            <div className="flex gap-2">
+              <button 
+                onClick={() => setMapType(MapType.SAT)}
+                className={`px-2 md:px-3 py-1 text-[10px] md:text-xs font-bold uppercase border transition-colors ${
+                  mapType === MapType.SAT 
+                    ? 'bg-red-600 border-red-600 text-white' 
+                    : 'bg-transparent border-gray-600 text-gray-400 hover:border-white'
+                }`}
+              >
+                Satellite
+              </button>
+              <button 
+                onClick={() => setMapType(MapType.MAP)}
+                className={`px-2 md:px-3 py-1 text-[10px] md:text-xs font-bold uppercase border transition-colors ${
+                  mapType === MapType.MAP 
+                    ? 'bg-yellow-500 border-yellow-500 text-black' 
+                    : 'bg-transparent border-gray-600 text-gray-400 hover:border-white'
+                }`}
+              >
+                Map
+              </button>
+            </div>
+
+            {/* Rotation Speed Control */}
+            <div className="flex flex-col items-end w-36 bg-black/40 backdrop-blur-md p-2 rounded border border-white/10">
+               <div className="flex justify-between w-full mb-1.5">
+                  <span className="text-[9px] text-gray-300 font-mono uppercase tracking-wider">Rotation</span>
+                  <span className="text-[9px] text-red-400 font-mono font-bold">{rotationSpeed.toFixed(2)}</span>
+               </div>
+               <input 
+                 type="range" 
+                 min="0" 
+                 max="0.5" 
+                 step="0.01" 
+                 value={rotationSpeed} 
+                 onChange={(e) => setRotationSpeed(parseFloat(e.target.value))}
+                 className="w-full h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer accent-red-600"
+               />
+            </div>
           </div>
         </div>
 
         {/* Streaming Indicator */}
-        <div className="absolute top-20 right-4 md:right-6 pointer-events-none text-right">
+        <div className="absolute top-28 right-4 md:right-6 pointer-events-none text-right">
            <div className="flex items-center justify-end gap-2 mb-1">
              <div className={`w-2 h-2 rounded-full ${progress < 100 ? 'bg-green-500 animate-pulse' : 'bg-gray-600'}`}></div>
              <span className="text-xs font-mono text-gray-400">

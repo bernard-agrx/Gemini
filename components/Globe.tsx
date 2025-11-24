@@ -8,6 +8,7 @@ import { MapType } from '../types';
 interface GlobeProps {
   mapType: MapType;
   onProgress?: (progress: number) => void;
+  rotationSpeed: number;
 }
 
 const vertexShader = `
@@ -76,7 +77,7 @@ const atmosphereFragmentShader = `
   }
 `;
 
-const Globe: React.FC<GlobeProps> = ({ mapType, onProgress }) => {
+const Globe: React.FC<GlobeProps> = ({ mapType, onProgress, rotationSpeed }) => {
   const meshRef = useRef<THREE.Mesh>(null);
   const managerRef = useRef<TileManager | null>(null);
   
@@ -124,7 +125,7 @@ const Globe: React.FC<GlobeProps> = ({ mapType, onProgress }) => {
   useFrame((state, delta) => {
     if (meshRef.current) {
       // Rotation
-      meshRef.current.rotation.y += delta * 0.05;
+      meshRef.current.rotation.y += delta * rotationSpeed;
       
       // Calculate current longitude facing the camera
       const rotY = meshRef.current.rotation.y;
