@@ -1,0 +1,5 @@
+{
+  "name": "Yandex Earth Globe",
+  "description": "A 3D interactive Earth globe visualized using Yandex Static Maps API tiles, featuring smooth rotation and custom Mercator reprojection.",
+  "requestFramePermissions": []
+}
